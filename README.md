@@ -1,33 +1,38 @@
 # EDA
-# **ESTUDIO EXPLORATORIO DE DATOS (EDA) SOBRE LA SOSTENIBILIDAD EN LA INDUSTRIA TEXTIL**
+# ✏️**ESTUDIO EXPLORATORIO DE DATOS (EDA) SOBRE LA SOSTENIBILIDAD EN LA INDUSTRIA TEXTIL**
 La sostenibilidad, el reciclaje de plásticos y el impacto ambiental de la industria textil son temas de gran importancia en la actualidad. Los textiles a base de plástico están en la intersección de estos temas.
 
-Con los datos encontrados podemos valorar las cantidades de diferentes tipos de plásticos utilizados, volúmenes de producción de textiles plásticos a lo largo del tiempo, empresas clave, ventas, precios, demanda por tipo de textil plástico (poliéster reciclado, nylon reciclado, etc.), segmentación de mercado, impacto ambiental (reducción de residuos plásticos, emisiones de carbono en comparación con textiles tradicionales, microplásticos liberados, etc,)
+
 ![imagen](https://www.datacolor.com/wp-content/uploads/2021/07/shutterstock_1474085432-900x500.jpg)
 ## **HIPÓTESIS**
 
-* Las marcas con una calificación de sostenibilidad más alta tienden a tener una menor huella de carbono, 
-menor uso de agua y menor producción de residuos.
+# 🏷️**HIPÓTESIS**
 
-* Las marcas que adoptan prácticas de fabricación eco-friendly tienen una menor huella de carbono, 
-uso de agua y producción de residuos en comparación con aquellas que no lo hacen.
+* 1.- Las marcas con una calificación de sostenibilidad más alta tienden a tener una menor huella de carbono, menor uso de agua y menor producción de residuos.
 
-* Las marcas que implementan programas de reciclaje tienen una calificación de sostenibilidad más alta.
+* 2.- La calificación de sostenibilidad promedio de las marcas ha mejorado con el tiempo.
 
-* El tipo de material utilizado influye en el precio promedio de los productos. Algunos materiales 
-reciclados o innovadores podrían ser más costosos.
+* 3.- La huella de carbono promedio, el uso de agua y la producción de residuos por marca han disminuido con el tiempo (debido a avances tecnológicos y una mayor conciencia ambiental).
 
-* La calificación de sostenibilidad promedio de las marcas ha mejorado con el tiempo.
+* 4.- La proporción de marcas que adoptan prácticas de fabricación eco-friendly y ofrecen programas de reciclaje ha aumentado con el tiempo.
 
-* La huella de carbono promedio, el uso de agua y la producción de residuos por marca han disminuido con el 
-tiempo debido a avances tecnológicos y una mayor conciencia ambiental.
+* 5.- La huella de carbono promedio, el uso de agua promedio y de la producción de residuos promedio varían significativamente entre países.
 
-* La proporción de marcas que adoptan prácticas de fabricación eco-friendly y ofrecen programas de reciclaje 
-ha aumentado con el tiempo.
+* 6- Hay correlación significativamente entre la huella de carbono, el uso de agua y de la producción de residuos entre países.
 
-* Existe una correlación entre la cantidad de gases de efecto invernadero emitidos y la cantidad de otros 
-contaminantes emitidos por una empresa o un tipo de producto.
+* 7.- La 'Market_Trend' de los productos podría variar según el país.
 
-* El consumo de agua y el consumo de energía por una empresa o un tipo de producto tienden a estar 
-positivamente correlacionados.
+* 8.- El nivel de sostenibilidad, inferido de la 'Sustainability_Rating', varía significativamente entre los diferentes países.
+
+# 📂**ESTRUCTURA DEL REPOSITORIO**
+
+El repositorio consta de los siguientes archivos y carpetas:
+
+➤ /data/ 🠪 Contiene el documento csv.
+
+➤ /crs/ 🠪 En dicha carpeta he incluido el archivo main.py para ejecutar el script.
+
+➤ Notebook 🠪 Dos Jupyter Notebook en el que realizo en uno la memoria y en el otro la limpieza de csv y limpieza de hipótesis.
+
+➤ /images/ 🠪 Incluye el conjunto de imágenes que se han utilizado en los Notebooks.
 

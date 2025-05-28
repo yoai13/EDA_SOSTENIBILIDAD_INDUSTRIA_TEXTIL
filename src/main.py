@@ -60,8 +60,6 @@ plt.grid(axis='y', linestyle='--')
 plt.tight_layout()
 plt.savefig("../images/promedio_desperdicios_sostenibilidad.jpg")
 
-plt.show()
-
 
 #Cálculo de correlaciones: Calcula la correlación entre la calificación de sostenibilidad y las métricas de impacto ambiental. Una correlación negativa indicaría que a mayor calificación de sostenibilidad, menor es el impacto ambiental.
 correlation_carbon = df1['Sustainability_Rating'].corr(df1['Carbon_Footprint_MT'])
@@ -92,9 +90,9 @@ plt.title('Correlación entre la Calificación de Sostenibilidad y Métricas de 
 for index, value in enumerate(correlations_data['Correlación']):
     plt.text(value, index, f'{value:.4f}', va='center', ha='left', color= "red")
 
-#Muestro el gráfico
+#Salvo la imagen
 plt.savefig("../images/correlacion_sostenibilidad_metricas")
-plt.show()
+
 
 #Análisis de la Hipótesis 1
 
@@ -114,7 +112,6 @@ plt.title('Tendencia de la Calificación de Sostenibilidad Promedio a lo Largo d
 plt.grid(True)
 plt.tight_layout()
 plt.savefig("../images/sostenibilidad_promedio_years")
-plt.show()
 
 #Análisis de la Hipótesis 2
 
@@ -150,14 +147,11 @@ plt.savefig("../images/tendencia_agua_por_año.jpg")
 plt.figure(figsize=(5, 3))
 plt.plot(average_impact_by_year['Year'], average_impact_by_year['Waste_Production_KG'], marker='o', linestyle='-', color="#33ff4f")
 plt.xlabel('Año')
-plt.ylabel('Promedio de Producción de Desperdicios (KG)', fontsize=8)
+plt.ylabel('Promedio de Producción de Desperdicios (KG)', fontsize=6)
 plt.title('Tendencia del Promedio de Producción de Desperdicios a lo Largo del Tiempo')
 plt.grid(True)
 plt.tight_layout()
 plt.savefig("../images/tendencia_desperdicios_por_año.jpg")
-plt.close()
-
-plt.show()
 
 #Análisis de la Hipótesis 3
 
@@ -195,7 +189,6 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.savefig("../images/practicas_sostenibles_años.jpg")
-plt.show()
 
 #Análisis de la Hipótesis 4
 
@@ -217,7 +210,6 @@ plt.pie(promedio_carbono_por_pais,
 plt.title('Promedio de Huella de Carbono por País')
 plt.axis('equal')  #Aseguro que la tarta sea un círculo.
 plt.savefig("../images/practicas_sostenibles_años.jpg")
-plt.show()
 
 #Promedio de agua
 promedio_agua_por_pais = df1.groupby('Country')['Water_Usage_Liters'].mean()
@@ -235,7 +227,6 @@ plt.pie(promedio_agua_por_pais,
 plt.title('Promedio de gasto de agua por País')
 plt.axis('equal')  #Aseguro que la tarta sea un círculo.
 plt.savefig("../images/practicas_sostenibles_agua_años.jpg")
-plt.show()
 
 #Promedio de Desperdicios
 promedio_desperdicios_por_pais = df1.groupby('Country')["Waste_Production_KG"].mean()
@@ -253,11 +244,116 @@ plt.pie(promedio_desperdicios_por_pais,
 plt.title('Promedio de desperdicios por País')
 plt.axis('equal')  #Aseguro que la tarta sea un círculo.
 plt.savefig("../images/practicas_sostenibles_waste_años.jpg")
-plt.show()
 
 #Análisis de la Hipótesis 5
 
-#HIPÓTESIS 6: "La 'Market_Trend' de los productos podría variar según el país."
+#HIPÓTESIS 6: Hay correlación significativamente entre la huella de carbono, el uso de agua y de la producción de residuos entre países
+
+#Agrupando las métricas por País
+#Calculo el promedio de las métricas de impacto ambiental por país
+promedio_impacto_por_pais = df1.groupby('Country')[['Carbon_Footprint_MT', 'Water_Usage_Liters', 'Waste_Production_KG']].mean()
+
+print("Promedio de Métricas de Impacto Ambiental por País:\n", promedio_impacto_por_pais)
+
+#Calculo la matriz de correlación entre las métricas a nivel de país
+matriz_correlacion_pais = promedio_impacto_por_pais.corr(method='pearson')
+
+print("\nMatriz de Correlación entre Métricas de Impacto Ambiental a Nivel de País:\n", matriz_correlacion_pais)
+
+#Visualización de la matriz de correlación con un mapa de calor
+plt.figure(figsize=(8, 6))
+sns.heatmap(matriz_correlacion_pais, annot=True, cmap="Greens", fmt=".2f")
+plt.title('Correlación entre Métricas de Impacto Ambiental Promedio por País')
+plt.tight_layout()
+plt.savefig("../images/practicas_sostenibles_waste_años.jpg")
+
+#Analizo de correlación específica entre dos métricas
+correlacion_carbono_agua = promedio_impacto_por_pais['Carbon_Footprint_MT'].corr(promedio_impacto_por_pais['Water_Usage_Liters'], method='pearson')
+print(f"\nCorrelación entre Promedio de Huella de Carbono y Promedio de Uso de Agua por País: {correlacion_carbono_agua:.2f}")
+
+correlacion_carbono_residuos = promedio_impacto_por_pais['Carbon_Footprint_MT'].corr(promedio_impacto_por_pais['Waste_Production_KG'], method='pearson')
+print(f"Correlación entre Promedio de Huella de Carbono y Promedio de Producción de Residuos por País: {correlacion_carbono_residuos:.2f}")
+
+correlacion_agua_residuos = promedio_impacto_por_pais['Water_Usage_Liters'].corr(promedio_impacto_por_pais['Waste_Production_KG'], method='pearson')
+print(f"Correlación entre Promedio de Uso de Agua y Promedio de Producción de Residuos por País: {correlacion_agua_residuos:.2f}")
+
+#Gráfico de dispersión para visualizar la relación entre dos métricas
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='Carbon_Footprint_MT', y='Water_Usage_Liters', data=promedio_impacto_por_pais, color="#33ff4f")
+for i, row in promedio_impacto_por_pais.iterrows():
+    plt.annotate(i, (row['Carbon_Footprint_MT'], row['Water_Usage_Liters']), textcoords="offset points", xytext=(0,10), ha='center')
+plt.title('Correlación entre Promedio de Huella de Carbono y Promedio de Uso de Agua por País')
+plt.xlabel('Promedio de Huella de Carbono (MT)')
+plt.ylabel('Promedio de Uso de Agua (Litros)')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("../images/carbono_water.jpg")
+
+#Gráfico de dispersión para visualizar la relación entre dos métricas
+plt.figure(figsize=(12, 8)) #Un poco más grande para dar espacio porque coincidian países en el mismo punto y no se podían leer
+sns.scatterplot(x='Carbon_Footprint_MT', y='Waste_Production_KG', data=promedio_impacto_por_pais, color="#33ff4f", s=80) #Aumento un poco el tamaño de los puntos
+
+for i, row in promedio_impacto_por_pais.iterrows():
+    x_offset = 5  #Desplazamiento horizontal inicial
+    y_offset = 5  #Desplazamiento vertical inicial
+
+    #Ajustes específicos para evitar superposiciones observadas en la imagen
+    if i == 'Japan':
+        x_offset = -12
+        y_offset = 5
+    elif i == 'Italy':
+        x_offset = -10
+        y_offset = 5
+    elif i == 'Brazil':
+        x_offset = -15
+        y_offset = 10
+    elif i == 'Australia':
+        x_offset = -18
+        y_offset = 5
+    elif i == 'India':
+        x_offset = -12
+        y_offset = 5
+    elif i == 'China':
+        x_offset = -15
+        y_offset = 5
+    elif i == 'UK':
+        x_offset = -8
+        y_offset = 5
+    elif i == 'France':
+        x_offset = -14
+        y_offset = 5
+    elif i == 'Germany':
+        x_offset = -20
+        
+
+
+    plt.annotate(i, (row['Carbon_Footprint_MT'], row['Waste_Production_KG']),
+                 textcoords="offset points",
+                 xytext=(x_offset, y_offset),
+                 ha='left', va='bottom', fontsize=9)
+
+plt.title('Correlación entre Promedio de Huella de Carbono y Promedio de Producción de Residuos por País', fontsize=14)
+plt.xlabel('Promedio de Huella de Carbono (MT)', fontsize=12)
+plt.ylabel('Promedio de Producción de Residuos (Kg)', fontsize=12)
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("../images/carbono_waste.jpg")
+
+#Gráfico de dispersión para visualizar la relación entre dos métricas
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='Water_Usage_Liters', y='Waste_Production_KG', data=promedio_impacto_por_pais, color="#33ff4f")
+for i, row in promedio_impacto_por_pais.iterrows():
+    plt.annotate(i, (row['Water_Usage_Liters'], row['Waste_Production_KG']), textcoords="offset points", xytext=(0,10), ha='center')
+plt.title('Correlación entre Promedio de Uso de Agua y Promedio de Producción de Residuos por País')
+plt.xlabel('Promedio de Uso de Agua (Litros)')
+plt.ylabel('Promedio de Producción de Residuos (Kg)')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("../images/water_waste.jpg")
+
+#Análisis de la Hipótesis 6
+
+#HIPÓTESIS 7: "La 'Market_Trend' de los productos podría variar según el país."
 
 #Agrupo los datos por país y analizo la distribución de 'Market_Trend':
 tendencia_por_pais = df1.groupby('Country')['Market_Trend'].value_counts()
@@ -281,7 +377,6 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Tendencia del Mercado')
 plt.tight_layout()
 plt.savefig("../images/market_trend_por_pais.jpg")
-plt.show()
 
 #Gráfico de barras agrupadas:
 tendencia_por_pais_porcentaje.plot(kind='bar', figsize=(12, 7))
@@ -292,7 +387,6 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Tendencia del Mercado')
 plt.tight_layout()
 plt.savefig("../images/market_trend_por_pais_agrupadas.jpg")
-plt.show()
 
 #El mismo estudio que el anterior pero también por Años
 tendencia_por_pais_anio_porcentaje = df.groupby(['Country', 'Year'])['Market_Trend'].value_counts(normalize=True).mul(100).unstack(fill_value=0)
@@ -317,11 +411,10 @@ for i, pais in enumerate(paises_unicos):
 
 plt.tight_layout()
 plt.savefig("../images/market_trend_por_pais_año.jpg")
-plt.show()
 
-#Análisis de la Hipótesis 5
+#Análisis de la Hipótesis 7
 
-#HIPÓTESIS 7: "El nivel de sostenibilidad, inferido de la 'Sustainability_Rating', varía significativamente entre los diferentes países.
+#HIPÓTESIS 8: "El nivel de sostenibilidad, inferido de la 'Sustainability_Rating', varía significativamente entre los diferentes países.
 
 #Cuento la frecuencia de cada 'Sustainability_Rating' por país
 conteo_sostenibilidad_por_pais = df1.groupby('Country')['Sustainability_Rating'].value_counts().unstack(fill_value=0)
@@ -342,7 +435,6 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Calificación de Sostenibilidad')
 plt.tight_layout()
 plt.savefig("../images/sostenibilidad_pais.jpg")
-plt.show()
 
 #Visualización 2: Gráfico de barras agrupadas (conteo)
 conteo_sostenibilidad_por_pais.plot(kind='bar', figsize=(12, 7))
@@ -353,7 +445,6 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Calificación de Sostenibilidad')
 plt.tight_layout()
 plt.savefig("../images/sostenibilidad_pais_agrupadas.jpg")
-plt.show()
 
 #Visualización 3: Box plots de una métrica numérica asociada a la sostenibilidad (si existe)
 #Huella de Carbono
@@ -366,7 +457,6 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.legend(title='Sustainability_Rating', loc='upper right')
 plt.savefig("../images/sostenibilidad_pais_carbon.jpg")
-plt.show()
 
 #Uso de Agua
 plt.figure(figsize=(12, 7))
@@ -378,7 +468,6 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.legend(title='Sustainability_Rating', loc='upper right')
 plt.savefig("../images/sostenibilidad_pais_carbon.jpg")
-plt.show()
 
 #Producción de Residuos
 plt.figure(figsize=(12, 7))
@@ -390,8 +479,6 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.legend(title='Sustainability_Rating', loc='upper right')
 plt.savefig("../images/sostenibilidad_pais_residuos.jpg")
-plt.show()
-
 
 #Visualización 4: Gráfico de barras del porcentaje de la calificación más alta por país
 #La calificación más alta es el número 1
@@ -409,8 +496,6 @@ plt.ylabel('Porcentaje de Marcas')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.savefig(f"../images/porcentaje_calificacion_mas_alta.jpg")
-plt.show()
-
 
 #Visualización 5: Gráfico de barras del porcentaje de la calificación más baja por país
 #La calificación más baja es 4
@@ -428,8 +513,6 @@ plt.ylabel('Porcentaje de Marcas')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.savefig(f"../images/porcentaje_calificacion_mas_baja.jpg")
-plt.show()
 
-#Análisis de la Hipótesis 6
-
+#Análisis de la Hipótesis 8
 
