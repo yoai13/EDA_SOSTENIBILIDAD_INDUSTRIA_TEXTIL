@@ -467,7 +467,7 @@ plt.ylabel('Uso de Agua (Litros)')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.legend(title='Sustainability_Rating', loc='upper right')
-plt.savefig("../images/sostenibilidad_pais_carbon.jpg")
+plt.savefig("../images/sostenibilidad_pais_agua.jpg")
 
 #Producción de Residuos
 plt.figure(figsize=(12, 7))
